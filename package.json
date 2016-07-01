@@ -1,0 +1,44 @@
+{
+  "author": {
+    "email": "vintproykt@gmail.com",
+    "name": "Rodion Borisov"
+  },
+  "bugs": {
+    "url": "https://github.com/VINTproYKT/jsondir-livedb/issues"
+  },
+  "dependencies": {
+    "deep-assign": "^2.0.0",
+    "dirtree": "0.0.2",
+    "mkdirp": "^0.5.1",
+    "watch": "^0.19.1"
+  },
+  "description": "Watch your filesystem-directories-and-JSON based database, keep all data in RAM and HDD.",
+  "homepage": "https://github.com/VINTproYKT/jsondir-livedb#readme",
+  "keywords": [
+    "database",
+    "db",
+    "live",
+    "watch",
+    "CRUD",
+    "JSON",
+    "fs",
+    "filesystem",
+    "dir",
+    "directory",
+    "RAM",
+    "HDD"
+  ],
+  "license": "MIT",
+  "maintainers": [
+    {
+      "email": "vintproykt@gmail.com",
+      "name": "VINTproYKT"
+    }
+  ],
+  "name": "jsondir-livedb",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VINTproYKT/jsondir-livedb.git"
+  },
+  "version": "0.0.1"
+}
