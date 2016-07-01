@@ -13,8 +13,8 @@ $ npm install --save jsondir-livedb
 ### Constructor
 
 ```
-	const LiveDB = require('jsondir-livedb');
-	var DB = new LiveDB(settings);
+const LiveDB = require('jsondir-livedb');
+var DB = new LiveDB(settings);
 ```
 
 Settings is the object containing these keys:
@@ -33,65 +33,65 @@ Root folder must be in your working directory already. In example it is called `
 Now you can put some files into this folder. Be it any folders with markdown and other meta files, library will touch JSON files only.
 
 ```
-	const LiveDB = require('jsondir-livedb');
-	var DB = new LiveDB({
-		root: 'storage'
-	});
+const LiveDB = require('jsondir-livedb');
+var DB = new LiveDB({
+	root: 'storage'
+});
 ```
 
 Create, check and then delete file:
 ```
-	if (DB.set('unnecessary/file.json')) {
-		console.log('Succesfully created');
-		console.log(DB.get('unnecessary/file.json')); // returns {}
-		console.log(DB.tree['unnecessary']['file.json']); // returns {}
-		console.log(DB.tree.unnecessary['file.json']); // returns {}
-		console.log(DB.tree.unnecessary.file); // returns undefined
-		if (DB.delete('unnecessary/file.json')) {
-			console.log('Succesfully deleted');
-		}
+if (DB.set('unnecessary/file.json')) {
+	console.log('Succesfully created');
+	console.log(DB.get('unnecessary/file.json')); // returns {}
+	console.log(DB.tree['unnecessary']['file.json']); // returns {}
+	console.log(DB.tree.unnecessary['file.json']); // returns {}
+	console.log(DB.tree.unnecessary.file); // returns undefined
+	if (DB.delete('unnecessary/file.json')) {
+		console.log('Succesfully deleted');
 	}
+}
 ```
 
 Create new JSON file with initial data and log tree:
 ```
-	DB.set('users/1/common.json', null, {
-		name: 'admin',
-		password: 'admin',
-		class: 5
-	});
-	console.log(require('util').inspect(DB.tree, {colors: true, depth: 5}));
+DB.set('users/1/common.json', null, {
+	name: 'admin',
+	password: 'admin',
+	class: 5
+});
+console.log(require('util').inspect(DB.tree, {colors: true, depth: 5}));
 ```
 
 Add a key:
 ```
-	DB.set('users/1/common.json', 'authKey', 'big secret');
+DB.set('users/1/common.json', 'authKey', 'big secret');
 ```
 
 Delete some key:
 ```
-	DB.delete('users/1/common.json', 'class');
+DB.delete('users/1/common.json', 'class');
 ```
 
 *All changes were made in runtime only.* So make them after few operations were made:
 ```
-	DB.push();
+DB.push();
 ```
 
 Put a setting `instantPush: true` if you want to apply changes (`set`, `delete`) to storage instantly.
 ```
-	...
-	var DB = new LiveDB({
-		root: 'storage',
-		instantPush: true
-	});
-	...
+...
+var DB = new LiveDB({
+	root: 'storage',
+	instantPush: true
+});
+...
 ```
 
 So delete JSON files in `users` now and push the changes:
 ```
-	DB.delete('users');
-	DB.push();
+DB.delete('users');
+DB.push();
 ```
 Note that folders were not deleted. You can remove empty directories in your storage with tools like [ded](https://www.npmjs.com/package/ded), [remove-empty-directories](https://www.npmjs.com/package/remove-empty-directories), etc.
 
@@ -101,10 +101,10 @@ By default your database has ability to watch and fetch changes in runtime.
 
 Set interval to output JSON file contents:
 ```
-	setInterval(() => {
-		var contents = DB.tree.users['1']['common.json'];
-		console.log('\n'+ require('util').inspect(contents, {colors: true, depth: 5}));
-	}, 5000);
+setInterval(() => {
+	var contents = DB.tree.users['1']['common.json'];
+	console.log('\n'+ require('util').inspect(contents, {colors: true, depth: 5}));
+}, 5000);
 ```
 
 Now make some changes in file `users/1/common.json` via any other program. See the difference.
