@@ -1,6 +1,6 @@
 # jsondir-livedb
 
-Watch your filesystem-directories-and-JSON based database, keep all data in RAM and HDD.
+Watch your filesystem-directories-and-JSON based storage, keep all data in RAM and HDD.
 
 ## Install
 
@@ -32,79 +32,96 @@ Root folder must be in your working directory already. In example it is called `
 
 Now you can put some files into this folder. Be it any folders with markdown and other meta files, library will touch JSON files only.
 
+### Dedicated database
+
 ```
 const LiveDB = require('jsondir-livedb');
 var DB = new LiveDB({
-	root: 'storage'
+    root: 'storage'
 });
 ```
 
-Create, check and then delete file:
+### Create, check and then delete file
 ```
 if (DB.set('unnecessary/file.json')) {
-	console.log('Succesfully created');
-	console.log(DB.get('unnecessary/file.json')); // returns {}
-	console.log(DB.tree['unnecessary']['file.json']); // returns {}
-	console.log(DB.tree.unnecessary['file.json']); // returns {}
-	console.log(DB.tree.unnecessary.file); // returns undefined
-	if (DB.delete('unnecessary/file.json')) {
-		console.log('Succesfully deleted');
-	}
+    console.log('Succesfully created');
+
+    console.log(DB.get('unnecessary/file.json')); // returns {}
+
+    console.log(DB.tree['unnecessary']['file.json']); // returns {}
+    console.log(DB.tree.unnecessary['file.json']); // returns {}
+
+    console.log(DB.tree.unnecessary.file); // returns undefined
+
+    if (DB.delete('unnecessary/file.json')) {
+        console.log('Succesfully deleted');
+    }
 }
 ```
 
-Create new JSON file with initial data and log tree:
+### Create new JSON file with initial data
 ```
 DB.set('users/1/common.json', null, {
-	name: 'admin',
-	password: 'admin',
-	class: 5
+    name: 'admin',
+    password: 'admin',
+    class: 5
 });
+```
+
+### Inspect the structure of tree
+
+```
 console.log(require('util').inspect(DB.tree, {colors: true, depth: 5}));
 ```
 
-Add a key:
+### Add a key
+
 ```
 DB.set('users/1/common.json', 'authKey', 'big secret');
 ```
 
-Delete some key:
+### Delete some key
+
 ```
 DB.delete('users/1/common.json', 'class');
 ```
 
-*All changes were made in runtime only.* So make them after few operations were made:
+### Putting runtime changes to storage
+
+*All previous changes were made in runtime only.* So make them in the storage too:
 ```
 DB.push();
 ```
 
-Put a setting `instantPush: true` if you want to apply changes (`set`, `delete`) to storage instantly.
+Put a setting `instantPush: true` if you want to apply changes (`set`, `delete`) to storage instantly without calling function above.
 ```
 ...
 var DB = new LiveDB({
-	root: 'storage',
-	instantPush: true
+    root: 'storage',
+    instantPush: true
 });
 ...
 ```
 
-So delete JSON files in `users` now and push the changes:
-```
-DB.delete('users');
-DB.push();
-```
-Note that folders were not deleted. You can remove empty directories in your storage with tools like [ded](https://www.npmjs.com/package/ded), [remove-empty-directories](https://www.npmjs.com/package/remove-empty-directories), etc.
-
 ### Check live functionality
 
-By default your database has ability to watch and fetch changes in runtime.
+By default your database has ability to watch and fetch changes in storage in runtime.
 
 Set interval to output JSON file contents:
 ```
 setInterval(() => {
-	var contents = DB.tree.users['1']['common.json'];
-	console.log('\n'+ require('util').inspect(contents, {colors: true, depth: 5}));
+    var contents = DB.tree.users['1']['common.json'];
+    console.log('\n'+ require('util').inspect(contents, {colors: true, depth: 5}));
 }, 5000);
 ```
 
 Now make some changes in file `users/1/common.json` via any other program. See the difference.
+
+### Remove object
+
+So delete JSON files in `users` now and push the changes:
+```
+DB.delete('users');
+DB.push();// if you prefer not to use `instantPush`
+```
+Note that folders were not deleted. You can remove empty directories in your storage with tools like [ded](https://www.npmjs.com/package/ded), [remove-empty-directories](https://www.npmjs.com/package/remove-empty-directories), etc.

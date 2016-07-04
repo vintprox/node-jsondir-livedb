@@ -4,7 +4,7 @@
     "name": "Rodion Borisov"
   },
   "bugs": {
-    "url": "https://github.com/VINTproYKT/jsondir-livedb/issues"
+    "url": "https://github.com/VINTproYKT/node-jsondir-livedb/issues"
   },
   "dependencies": {
     "deep-assign": "^2.0.0",
@@ -12,8 +12,8 @@
     "mkdirp": "^0.5.1",
     "watch": "^0.19.1"
   },
-  "description": "Watch your filesystem-directories-and-JSON based database, keep all data in RAM and HDD.",
-  "homepage": "https://github.com/VINTproYKT/jsondir-livedb#readme",
+  "description": "Watch your filesystem-directories-and-JSON based storage, keep all data in RAM and HDD.",
+  "homepage": "https://github.com/VINTproYKT/node-jsondir-livedb#readme",
   "keywords": [
     "database",
     "db",
@@ -38,7 +38,7 @@
   "name": "jsondir-livedb",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/VINTproYKT/jsondir-livedb.git"
+    "url": "git+https://github.com/VINTproYKT/node-jsondir-livedb.git"
   },
   "version": "0.0.2"
 }
