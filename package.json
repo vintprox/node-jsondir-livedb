@@ -40,5 +40,5 @@
     "type": "git",
     "url": "git+https://github.com/VINTproYKT/node-jsondir-livedb.git"
   },
-  "version": "0.0.2"
+  "version": "0.0.3"
 }
