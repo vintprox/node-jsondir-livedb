@@ -43,6 +43,10 @@ function deleteByRelPath(relPath, separator, obj) {
 	return true;
 }
 
+function stringify(obj, prettify) {
+	return prettify ? JSON.stringify(obj, null, 2) : JSON.stringify(obj);
+}
+
 /*
 	DB - Initial function, start watching whole storage for changes, returns object with `tree`
 	Arguments:
@@ -53,6 +57,7 @@ function deleteByRelPath(relPath, separator, obj) {
 		Optional key `pathSep` sets separator for relative paths in tree (default: '/')
 		Optional key `unwatch` sets whether watcher is not supposed to be used
 		Optional key `watch` represents options for watcher (https://www.npmjs.com/package/watch#watchwatchtreeroot-options-callback)
+		Optional key `prettify` sets whether to write pretty formatted json til files
 */
 var DB = module.exports = function DB(obj) {
 	if (!(this instanceof DB)) {
@@ -60,6 +65,7 @@ var DB = module.exports = function DB(obj) {
     }
 	this.liveIgnore = false;
 	this.pathSep = '/';
+	this.prettify = true;
 	Object.assign(this, obj);
 	this.root = path.resolve(this.root);
 
@@ -108,7 +114,7 @@ DB.prototype.push = function() {
 				if (this.commits[n][0] === 'create') {
 					if (path.extname(this.commits[n][1]) == '.json') {
 						mkdirp.sync(path.dirname(absPath));
-						fs.writeFileSync(absPath, JSON.stringify(this.commits[n][2]));
+						fs.writeFileSync(absPath, stringify(this.commits[n][2]), this.prettify);
 					}
 				}
 				else if (this.commits[n][0] === 'delete') {
@@ -126,7 +132,7 @@ DB.prototype.push = function() {
 			}
 			else {// string given, write contents to this file
 				var absPath = path.resolve(this.root, this.commits[n]);
-				fs.writeFileSync(absPath, JSON.stringify(this.get(this.commits[n])));
+				fs.writeFileSync(absPath, stringify(this.get(this.commits[n]), this.prettify));
 			}
 		}
 	}
@@ -166,7 +172,7 @@ DB.prototype.set = function(relPath, key, value) {
 	try {
 		if (key) {
 			var contents = this.get(relPath);
-			eval('contents'+ (key || '') +' = value');
+			contents[key] = value;
 			this.commits.push(relPath);
 		}
 		else {
